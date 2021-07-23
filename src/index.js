@@ -1,12 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
 import { ToastProvider } from "react-toast-notifications";
+import { configureStore } from "./store/configureStore";
+import { Provider } from "react-redux"
 
-ReactDOM.render(<BrowserRouter><ToastProvider><App /></ToastProvider></BrowserRouter>, document.getElementById('root'));
- 
+
+const store = configureStore();
+ReactDOM.render(
+    <Provider store={store}>
+        <BrowserRouter>
+            <ToastProvider>
+            <App />
+            </ToastProvider>
+        </BrowserRouter>
+        </Provider>,
+        document.getElementById("root")
+);
 
 reportWebVitals();

@@ -25,7 +25,7 @@ export default function CandidateCvList() {
             <Table.HeaderCell>Yetenekler</Table.HeaderCell>
             <Table.HeaderCell>Languages</Table.HeaderCell>
             <Table.HeaderCell>Github</Table.HeaderCell>
-            <Table.HeaderCell>Linked.in</Table.HeaderCell>
+            <Table.HeaderCell>Linkedin</Table.HeaderCell>
             <Table.HeaderCell>Details</Table.HeaderCell>
           </Table.Row>
         </Table.Header>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useToasts } from "react-toast-notifications";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   Table,
   Button,
@@ -11,10 +11,12 @@ import {
 } from "semantic-ui-react";
 import JobAdvertisementService from "../services/jobAdvertisementService";
 import JobAdvertisementFilter from "../layouts/filters/JobAdvertisementFilter";
+import CandidateService from "../services/candidateService";
+import { useSelector } from "react-redux";
 
 export default function JobAdvertisementList() {
   const [jobs, setJobs] = useState([]);
-
+  const {authItem} = useSelector(state => state.auth)
   const [activePage, setActivePage] = useState(1);
   const [filterOption, setFilterOption] = useState({});
   const [pageSize, setPageSize] = useState(2);
@@ -45,7 +47,19 @@ export default function JobAdvertisementList() {
 
   const handlePaginationChange = (e, { activePage }) => {
     setActivePage(activePage);
+
   };
+
+  let addToFavorite = (candidateId, jobAdvertisementId) => {
+    let candidateService = new CandidateService();
+    candidateService.likejobadvertisement(candidateId, jobAdvertisementId).then((result) => {
+      addToast(result.data.message, {
+        appearance: result.data.success ? "success" : "error",
+        autoDismiss: true,
+      });
+    });
+  };
+
 
   
 
@@ -70,12 +84,12 @@ export default function JobAdvertisementList() {
             <Table.HeaderCell>City</Table.HeaderCell>
             <Table.HeaderCell>Minimum Salary</Table.HeaderCell>
             <Table.HeaderCell>Maximum Salary</Table.HeaderCell>
-            <Table.HeaderCell>Açıklama</Table.HeaderCell>
             <Table.HeaderCell>Working Time</Table.HeaderCell>
             <Table.HeaderCell>Deadline</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Detail</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Add to Favorites</Table.HeaderCell>
+            <Table.HeaderCell>Detail</Table.HeaderCell>
           </Table.Row>
           </Table.Header>
 
@@ -87,7 +101,6 @@ export default function JobAdvertisementList() {
               <Table.Cell>{job.city.cityName}</Table.Cell>
               <Table.Cell>{job.minSalary} ₺</Table.Cell>
               <Table.Cell>{job.maxSalary} ₺</Table.Cell>
-              <Table.Cell>{job.jobDescription}</Table.Cell>
               <Table.Cell>{job.workTime.time}</Table.Cell>
               <Table.Cell>{job.applicationDeadline}</Table.Cell>
               <Table.Cell>
@@ -101,20 +114,24 @@ export default function JobAdvertisementList() {
                 days
               </Table.Cell>
               <Table.Cell>
-                {job.activationStatus === true ? "Active" : "Passive"}
+                {job.activationStatus === true ? "Passive" : "Active"}
               </Table.Cell>
               <Table.Cell>
-                <Button
-                  animated
-                  as={NavLink}
-                  to={`/jobAdvertisements/${job.id}`}
-                  color="violet"
-                >
-                  <Button.Content visible>Show</Button.Content>
-                  <Button.Content hidden>
-                    <Icon name="arrow right" />
-                  </Button.Content>
+              <Button 
+                onClick={() => addToFavorite(authItem[0].user.id, job.id)}
+                
+                 color="olive"
+                 size="medium"
+                 >
+                  <Icon name="heart"/>
                 </Button>
+              </Table.Cell>
+              <Table.Cell>
+                <Button as={Link} to={`/jobads/${job.id}`}
+                    content="Detayları Gör"
+                    icon="right arrow"
+                    labelPosition="right"
+                  />
               </Table.Cell>
               
             </Table.Row>

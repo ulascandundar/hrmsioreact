@@ -4,12 +4,14 @@ import SignedIn from "./SignedIn";
 import SignedOut from "./SignedOut";
 import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function Navi() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const history = useHistory();
 
+  const {authItem} = useSelector(state => state.auth)
   function handleSignOut() {
     setIsAuthenticated(false);
     history.push("/");
@@ -78,16 +80,13 @@ export default function Navi() {
           </Menu.Item>
           
           <Menu.Menu style={{ margin: "0.5em" }}>
-            {isAuthenticated ? (
-              <SignedIn signOut={handleSignOut} />
-            ) : (
-              <SignedOut signIn={handleSignIn} />
-            )}
+          {authItem[0].loggedIn?<SignedIn/>:<SignedOut/>}
           </Menu.Menu>
 
-          <Dropdown trigger={<span><Icon name='key'/> Admin</span>}  style={{ margin: "0.5em" }} item direction="left" options={options3} />
+          
     
       </Menu>
     </div>
   );
 }
+//<Dropdown trigger={<span><Icon name='key'/> Admin</span>}  style={{ margin: "0.5em" }} item direction="left" options={options3} />

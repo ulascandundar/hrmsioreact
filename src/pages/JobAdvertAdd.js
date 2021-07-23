@@ -10,12 +10,14 @@ import WorkingTimeService from '../services/workingTimeService';
 import JobAdvertisementService from '../services/jobAdvertisementService';
 import {ToastContainer,Zoom,Bounce} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { useSelector } from 'react-redux';
 
 export default function JobAdvertAdd() {
 
     const [cities, setCities] = useState([])
     const [jobPositions, setJobPositions] = useState([])
     const [workTimes, setWorkTimes] = useState([])
+    const {authItem} = useSelector(state => state.auth)
 
 
     useEffect(() => {
@@ -35,7 +37,7 @@ export default function JobAdvertAdd() {
             maxSalary: "",
             numberOfOpenPositions: "",
             applicationDeadline: "",
-            employer_id: "1",
+            employer_id: authItem[0].user.id,
             time_id: "",
             jobposition_id: "",
             city_id: "",
@@ -47,7 +49,6 @@ export default function JobAdvertAdd() {
                 maxSalary: Yup.number().required("Maximum maaş bırakılamaz!"),
                 numberOfOpenPositions: Yup.number().required("Açık pozisyon sayısı boş bırakılamaz!"),
                 applicationDeadline: Yup.date().required("Son başvuru tarihi bos bırakılamaz!"),
-                employer_id: Yup.number().required("İşveren bos bırakılamaz!"),
                 time_id: Yup.number().required("Çalışma şekli bos bırakılamaz!"),
                 jobposition_id: Yup.number().required("İş pozisyonu boş bırakılamaz!"),
                 city_id: Yup.string().required("Şehir boş bırakılamaz!"),
@@ -162,18 +163,7 @@ export default function JobAdvertAdd() {
                             }
                         </Form.Field>
                     </GridColumn>
-                    <GridColumn width={14}>
-                        <Form.Field>
-                            <label>İşveren</label>
-                            <input id="employer_id" name="employer_id" value={values.employer_id} onChange={handleChange} />
-                            {
-                                errors.employer_id && touched.employer_id &&
-                                <Label basic color='red' pointing>
-                                    {errors.employer_id}
-                                </Label>
-                            }
-                        </Form.Field>
-                    </GridColumn>
+                    
                     <GridColumn width={14}>
                         <Form.Field>
                             <label>Açıklama</label>
